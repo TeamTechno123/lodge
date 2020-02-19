@@ -60,7 +60,7 @@
                     <?php } else{ ?>
                       <button id="btn_save" type="submit" class="btn btn-success px-4">Save</button>
                     <?php } ?>
-                    <a href="<?php echo base_url() ?>User/room_list" class="btn btn-default ml-4">Cancel</a>
+                    <a href="<?php echo base_url() ?>User/user_list" class="btn btn-default ml-4">Cancel</a>
                   </div>
                 </div>
               </form>

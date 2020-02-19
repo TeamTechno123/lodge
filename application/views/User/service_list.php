@@ -36,24 +36,31 @@
                   <th class="wt_50">#</th>
                   <th>Service Name</th>
                   <th>Service Rate</th>
+                  <th>Service Status</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                  <!-- <?php $i = 0;
-                  foreach ($user_list as $list) {
-                    $i++; ?>
+                  <?php $i = 0;
+                  foreach ($service_list as $list) {
+                    $i++;
+                  if ($list->service_status== '1') {
+                    $service_status= 'Active';
+                  }
+                  else{
+                    $service_status= 'Inctive';
+                  }
+                    ?>
                   <tr>
                     <td><?php echo $i; ?></td>
-                    <td><?php echo $list->user_name ?></td>
-                    <td><?php echo $list->user_city ?></td>
-                    <td><?php echo $list->user_mobile ?></td>
-                    <td><?php echo $list->user_email ?></td>
+                    <td><?php echo $list->service_name; ?></td>
+                    <td><?php echo $list->service_rate; ?></td>
+                    <td><?php echo $service_status; ?></td>
                     <td>
-                      <a href="<?php echo base_url(); ?>User/edit_user/<?php echo $list->user_id; ?>"> <i class="fa fa-edit"></i> </a>
-                      <a href="<?php echo base_url(); ?>User/delete_user/<?php echo $list->user_id; ?>" onclick="return confirm('Delete this User');" class="ml-4"> <i class="fa fa-trash"></i> </a>
+                      <a href="<?php echo base_url(); ?>User/edit_service/<?php echo $list->service_id; ?>"> <i class="fa fa-edit"></i> </a>
+                      <a href="<?php echo base_url(); ?>User/delete_service/<?php echo $list->service_id; ?>" onclick="return confirm('Delete this User');" class="ml-4"> <i class="fa fa-trash"></i> </a>
                     </td>
-                  <?php } ?> -->
+                  <?php } ?>
                   </tr>
                 </tbody>
               </table>

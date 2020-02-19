@@ -30,16 +30,14 @@
                 <div class="card-body row">
                   <div class="col-md-12 ">
                     <div class="row">
-
-
                       <div class="form-group col-md-12">
                         <label>Enter Service Name </label>
-                        <input type="text" class="form-control form-control-sm" name="customer_company" id="customer_company" value="<?php if(isset($customer_company)){ echo $customer_company; } ?>" placeholder="" required>
+                        <input type="text" class="form-control form-control-sm" name="service_name" id="service_name" value="<?php if(isset($service_info)){ echo $service_info['service_name']; } ?>" placeholder="Enter Service Name " required>
                       </div>
 
                       <div class="form-group col-md-6">
                         <label>Enter Rate </label>
-                        <input type="text" class="form-control form-control-sm" name="customer_company" id="customer_company" value="<?php if(isset($customer_company)){ echo $customer_company; } ?>" placeholder="" required>
+                        <input type="text" class="form-control form-control-sm" name="service_rate" id="service_rate" value="<?php if(isset($service_info)){ echo $service_info['service_rate']; } ?>" placeholder="Enter Rate" required>
                       </div>
 
                   </div>
@@ -48,8 +46,8 @@
                 <div class="card-footer row">
                   <div class="col-md-6">
                     <div class="custom-control custom-checkbox ml-2">
-                      <input class="custom-control-input" type="checkbox" name="customer_status" id="customer_status" value="1" checked>
-                      <label for="customer_status" class="custom-control-label">Active</label>
+                      <input class="custom-control-input" type="checkbox" name="service_status" id="service_status" value="1" checked>
+                      <label for="service_status" class="custom-control-label">Active</label>
                     </div>
                   </div>
                   <div class="col-md-6 text-right">

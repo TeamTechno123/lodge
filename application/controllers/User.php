@@ -280,30 +280,109 @@ class User extends CI_Controller{
 
   /**********************     Service Information      **********************/
 
-    // Items List...
-    public function service_list(){
-      $lodge_user_id = $this->session->userdata('lodge_user_id');
-      $lodge_company_id = $this->session->userdata('lodge_company_id');
-      $lodge_roll_id = $this->session->userdata('lodge_roll_id');
-      if($lodge_user_id == '' && $lodge_company_id == ''){ header('location:'.base_url().'User'); }
-      $data['service_list'] = $this->User_Model->user_list($lodge_company_id);
-      $this->load->view('Include/head',$data);
-      $this->load->view('Include/navbar',$data);
-      $this->load->view('User/service_list',$data);
-      $this->load->view('Include/footer',$data);
-    }
+    // // Items List...
+    // public function service_list(){
+    //   $lodge_user_id = $this->session->userdata('lodge_user_id');
+    //   $lodge_company_id = $this->session->userdata('lodge_company_id');
+    //   $lodge_roll_id = $this->session->userdata('lodge_roll_id');
+    //   if($lodge_user_id == '' && $lodge_company_id == ''){ header('location:'.base_url().'User'); }
+    //   $data['service_list'] = $this->User_Model->user_list($lodge_company_id);
+    //   $this->load->view('Include/head',$data);
+    //   $this->load->view('Include/navbar',$data);
+    //   $this->load->view('User/service_list',$data);
+    //   $this->load->view('Include/footer',$data);
+    // }
+    //
+    // //Add Item
+    // public function service(){
+    //   $lodge_user_id = $this->session->userdata('lodge_user_id');
+    //   $lodge_company_id = $this->session->userdata('lodge_company_id');
+    //   $lodge_roll_id = $this->session->userdata('lodge_roll_id');
+    //   if($lodge_user_id == '' && $lodge_company_id == ''){ header('location:'.base_url().'User'); }
+    //   $this->load->view('Include/head');
+    //   $this->load->view('Include/navbar');
+    //   $this->load->view('User/service');
+    //   $this->load->view('Include/footer');
+    // }
+  public function service_list(){
+    $lodge_user_id = $this->session->userdata('lodge_user_id');
+    $lodge_company_id = $this->session->userdata('lodge_company_id');
+    $lodge_roll_id = $this->session->userdata('lodge_roll_id');
+    if($lodge_user_id == '' && $lodge_company_id == ''){ header('location:'.base_url().'User'); }
+    $data['service_list'] = $this->User_Model->get_list($lodge_company_id,'service_id','ASC','service');
+    $this->load->view('Include/head', $data);
+    $this->load->view('Include/navbar', $data);
+    $this->load->view('User/service_list', $data);
+    $this->load->view('Include/footer', $data);
+  }
 
-    //Add Item
-    public function service(){
-      $lodge_user_id = $this->session->userdata('lodge_user_id');
-      $lodge_company_id = $this->session->userdata('lodge_company_id');
-      $lodge_roll_id = $this->session->userdata('lodge_roll_id');
-      if($lodge_user_id == '' && $lodge_company_id == ''){ header('location:'.base_url().'User'); }
-      $this->load->view('Include/head');
-      $this->load->view('Include/navbar');
-      $this->load->view('User/service');
-      $this->load->view('Include/footer');
+  // Add Tax Slab...
+  public function service(){
+    $lodge_user_id = $this->session->userdata('lodge_user_id');
+    $lodge_company_id = $this->session->userdata('lodge_company_id');
+    $lodge_roll_id = $this->session->userdata('lodge_roll_id');
+    if($lodge_user_id == '' && $lodge_company_id == ''){ header('location:'.base_url().'User'); }
+    $this->form_validation->set_rules('service_name', 'Name', 'trim|required');
+    if ($this->form_validation->run() != FALSE) {
+      $service_status = $this->input->post('service_status');
+      if(!isset($service_status)){ $service_status = 0; }
+      $save_data = array(
+        'company_id' => $lodge_company_id,
+        'service_name' => $this->input->post('service_name'),
+        'service_rate' => $this->input->post('service_rate'),
+        'service_status' => $service_status,
+        'service_addedby' => $lodge_user_id,
+      );
+      $this->User_Model->save_data('service', $save_data);
+      $this->session->set_flashdata('save_success','success');
+      header('location:'.base_url().'User/service_list');
     }
+    $this->load->view('Include/head');
+    $this->load->view('Include/navbar');
+    $this->load->view('User/service');
+    $this->load->view('Include/footer');
+  }
+
+  // Edit Tax Slab...
+  public function edit_service($service_id){
+    $lodge_user_id = $this->session->userdata('lodge_user_id');
+    $lodge_company_id = $this->session->userdata('lodge_company_id');
+    $lodge_roll_id = $this->session->userdata('lodge_roll_id');
+    if($lodge_user_id == '' && $lodge_company_id == ''){ header('location:'.base_url().'User'); }
+    $this->form_validation->set_rules('service_name', 'Name', 'trim|required');
+    if ($this->form_validation->run() != FALSE) {
+      $service_status = $this->input->post('service_status');
+      if(!isset($service_status)){ $service_status = 0; }
+      $update_data = array(
+        'service_name' => $this->input->post('service_name'),
+        'service_rate' => $this->input->post('service_rate'),
+        'service_status' => $service_status,
+        'service_addedby' => $lodge_user_id,
+      );
+      $this->User_Model->update_info('service_id', $service_id, 'service', $update_data);
+      $this->session->set_flashdata('update_success','success');
+      header('location:'.base_url().'User/service_list');
+    }
+    $service_info = $this->User_Model->get_info_arr('service_id',$service_id,'service');
+    if(!$service_info){ header('location:'.base_url().'User/service_list'); }
+    $data['update'] = 'update';
+    $data['service_info'] = $service_info[0];
+    $this->load->view('Include/head', $data);
+    $this->load->view('Include/navbar', $data);
+    $this->load->view('User/service', $data);
+    $this->load->view('Include/footer', $data);
+  }
+
+  // Delete Tags....
+  public function delete_service($service_id){
+    $lodge_user_id = $this->session->userdata('lodge_user_id');
+    $lodge_company_id = $this->session->userdata('lodge_company_id');
+    $lodge_roll_id = $this->session->userdata('lodge_roll_id');
+    if($lodge_user_id == '' && $lodge_company_id == ''){ header('location:'.base_url().'User'); }
+    $this->User_Model->delete_info('service_id', $service_id, 'service');
+    $this->session->set_flashdata('delete_success','success');
+    header('location:'.base_url().'User/service_list');
+  }
 
   /***********************     Manage Appointment Information      ******************************/
   // Customer List...
